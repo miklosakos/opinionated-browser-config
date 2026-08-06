@@ -63,27 +63,86 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # Ensure google-chrome package is installed system-wide
     environment.systemPackages = [ pkgs.google-chrome ];
 
     programs.chromium = {
       enable = true;
       policies = lib.mkMerge [
-        # Base privacy/feature policies
         {
+          ShowHomeButton = true;
+          DefaultBrowserSettingEnabled = false;
           MetricsReportingEnabled = false;
+          DefaultGeolocationSetting = 2;
+          AIModeSettings = 1;
+          SafeBrowsingEnabled = true;
           PasswordManagerEnabled = false;
-          AutofillAddressEnabled = false;
           AutofillCreditCardEnabled = false;
-          TranslateEnabled = false;
-          SpellcheckEnabled = true;
+          AutofillAddressEnabled = false;
+          HighEfficiencyModeEnabled = true;
+          MemorySaverModeSavings = 1;
+          AllowExperimentalAIForUsers = false;
+          BackgroundModeEnabled = false;
+          RestoreOnStartup = -1;
+          BookmarkBarEnabled = true;
+          EnableMediaRouter = false;
+          PrintingEnabled = false;
+          AutoplayAllowed = false;
+          WebAppInstallByUserEnabled = false;
+          HardwareAccelerationModeEnabled = true;
+          ChromeSuggestionsSettings = 1;
+          CreateThemesSettings = 1;
+          DevToolsGenAiSettings = 2;
+          GeminiActOnWebSettings = 1;
+          GeminiSparkSettings = 1;
+          GenAILocalFoundationalModelSettings = 1;
+          GenAiDefaultSettings = 2;
+          HelpMeWriteSettings = 2;
+          HistorySearchSettings = 2;
+          SearchContentSharingSettings = 1;
+          SmartTabSharingSettings = 1;
+          TabCompareSettings = 2;
+          DefaultNotificationsSetting = 2;
+          ScreenCaptureAllowed = true;
+          DefaultSensorsSetting = 2;
+          DefaultSerialGuardSetting = 2;
+          DefaultSmartCardConnectSetting = 2;
+          DefaultWebBluetoothGuardSetting = 2;
+          DefaultWebHidGuardSetting = 2;
+          DefaultWebUsbGuardSetting = 2;
+          DefaultWindowManagementSetting = 2;
+          AlternateErrorPagesEnabled = false;
+          AudioCaptureAllowed = true;
+          BuiltInAIAPIsEnabled = false;
+          ChromeDataRegionSetting = 2;
+          Disable3DAPIs = false;
+          CacheEncryptionEnabled = true;
+          DesktopSharingHubEnabled = false;
+          EnterpriseProfileBadgeToolbarSettings = 0;
+          BrowserGuestModeEnabled = false;
+          LocalNetworkAccessPermissionsPolicyDefaultEnabled = false;
+          AbusiveExperienceInterventionEnforce = true;
+          AdsSettingForIntrusiveAdsSites = 2;
+          AdvancedProtectionAllowed = true;
+          BrowserLabsEnabled = false;
+          FeedbackSurveysEnabled = false;
+          ForceGoogleSafeSearch = true;
+          GoogleSearchSidePanelEnabled = false;
+          MediaRecommendationsEnabled = false;
+          URLBlocklist = [
+            "remotedesktop.google.com"
+            "remotedesktop-pa.googleapis.com"
+            "instantmessaging-pa.googleapis.com"
+          ];
+          RemoteAccessHostFirewallTraversal = false;
+          BrowserSignIn = 0;
+          SyncDisabled = true;
         }
 
         # Conditional Homepage & Startup URLs
         (lib.mkIf (cfg.home != null) {
           HomepageLocation = cfg.home;
           HomepageIsNewTabPage = false;
-          RestoreOnStartup = 4; # Open a list of URLs
+          RestoreOnStartup = -1; # Open a list of URLs
           RestoreOnStartupURLs = [ cfg.home ];
         })
 
