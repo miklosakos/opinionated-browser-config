@@ -1,16 +1,11 @@
 {
   description = "Opinionated browser config for Chrome and Firefox";
-
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-  };
-
-  outputs = { self, nixpkgs, ... }@inputs: {
-    nixosModules = {
-      firefox = ./modules/firefox;
-      chrome = ./modules/chrome;
+  outputs = inputs: {
+    nixosModules = rec {
+      firefox = ./nix/modules/firefox;
+      chrome = ./nix/modules/chrome;
       default = {
-        imports = [ ./modules/firefox ./modules/chrome ];
+        imports = [ firefox chrome ];
       };
     };
   };
