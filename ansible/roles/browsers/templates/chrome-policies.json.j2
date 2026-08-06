@@ -1,0 +1,34 @@
+{
+  {% if home is defined and home %}
+  "HomepageLocation": "{{ home }}",
+  "HomepageIsNewTabPage": false,
+  "RestoreOnStartup": 4,
+  "RestoreOnStartupURLs": [ "{{ home }}" ],
+  {% endif %}
+  {% if search is defined and search %}
+  "DefaultSearchProviderEnabled": true,
+  "DefaultSearchProviderName": "{{ search.name }}",
+  "DefaultSearchProviderSearchURL": "{{ search.url }}",
+  {% endif %}
+  {% if bookmarks is defined and bookmarks %}
+  "ManagedBookmarks": [
+    {
+      "name": "{{ bookmarks.folderName }}",
+      "children": [
+        {% for link in bookmarks.links %}
+        { "name": "{{ link.name }}", "url": "{{ link.url }}" } culturale{{ "," if not loop.last else "" }}
+        {% endfor %}
+      ]
+    }
+  ],
+  {% endif %}
+  "MetricsReportingEnabled": false,
+  "PasswordManagerEnabled": false,
+  "AutofillAddressEnabled": false,
+  "AutofillCreditCardEnabled": false,
+  {% if ublock is defined and ublock %}
+  "ExtensionInstallForcelist": [
+    "ddkjiahejlhfcafbddmgiahcphecmpfh;https://clients2.google.com/service/update2/crx",
+  ]
+  {% endif %}
+}

@@ -1,0 +1,32 @@
+---
+- name: Ensure Firefox policy directory exists
+  ansible.builtin.file:
+    path: /etc/firefox/policies
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Deploy Firefox opinionated config
+  ansible.builtin.template:
+    src: firefox-policies.json.j2
+    dest: /etc/firefox/policies/policies.json
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Ensure Google Chrome policy directory exists
+  ansible.builtin.file:
+    path: /etc/opt/policies/managed
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Deploy Google Chrome opinionated config
+  ansible.builtin.template:
+    src: chrome-policies.json.j2
+    dest: /etc/opt/policies/managed/policies.json
+    owner: root
+    group: root
+    mode: '0644'

@@ -1,0 +1,63 @@
+{
+  "policies": {
+    {% if search is defined and search %}
+    "SearchEngines": {
+      "Default": "{{ search.name }}",
+      "PreventInstalls": true,
+      "Add": [
+        {
+          "Name": "{{ search.name }}",
+          "URLTemplate": "{{ search.url }}",
+          "Method": "GET"
+        }
+      ]
+    },
+    {% endif %}
+    {% if bookmarks is defined and bookmarks %}
+    "ManagedBookmarks": [
+      { "toplevel_name": "{{ bookmarks.folderName }}" }
+      {% for link in bookmarks.links %}
+      , { "name": "{{ link.name }}", "url": "{{ link.url }}" }
+      {% endfor %}
+    ],
+    {% endif %}
+    {% if home is defined and home %}
+    "Homepage": {
+      "URL": "{{ home }}",
+      "Locked": true
+    },
+    {% endif %}
+    "DisableTelemetry": true,
+    "DisablePocket": true,
+    "DisableFirefoxStudies": true,
+    "PasswordManagerEnabled": false,
+    "HardwareAcceleration": true,
+    "NewTabPage": false,
+    "Permissions": {
+      "Notifications": { "BlockNewRequests": true }
+    },
+    {% if ublock is defined and ublock %}
+    "ExtensionSettings": {
+      "uBlock0@raymondhill.net": {
+        "installation_mode": "force_installed",
+        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi"
+      }
+    },
+    "3rdparty": {
+      "Extensions": {
+        "uBlock0@raymondhill.net": {
+          "adminSettings": {
+            "selectedFilterLists": [
+              {% if ublock_filters is defined and ublock_filters %}
+              {% for filter in ublock_filters %}
+              "{{ filter }}"{{ "," if not loop.last else "" }}
+              {% endfor %}
+              {% endif %}
+            ]
+          }
+        }
+      }
+    }
+    {% endif %}
+  }
+}
