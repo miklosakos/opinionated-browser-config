@@ -67,7 +67,7 @@ in
 
     programs.chromium = {
       enable = true;
-      policies = lib.mkMerge [
+      extraOpts = lib.mkMerge [
         {
           ShowHomeButton = true;
           DefaultBrowserSettingEnabled = false;
@@ -138,23 +138,21 @@ in
           SyncDisabled = true;
         }
 
-        # Conditional Homepage & Startup URLs
-        (lib.mkIf (cfg.home != null) {
+        (if cfg.home != null then {
           HomepageLocation = cfg.home;
           HomepageIsNewTabPage = false;
           RestoreOnStartup = -1; # Open a list of URLs
           RestoreOnStartupURLs = [ cfg.home ];
-        })
+        } else {} )
 
-        # Conditional Search Engine
-        (lib.mkIf (cfg.search != null) {
+        (if cfg.search != null then {
           DefaultSearchProviderEnabled = true;
           DefaultSearchProviderName = cfg.search.name;
           DefaultSearchProviderSearchURL = cfg.search.url;
-        })
+        } else {})
 
         # Conditional Managed Bookmarks
-        (lib.mkIf (cfg.bookmarks != null) {
+        (if cfg.bookmarks != null then {
           ManagedBookmarks = [
             {
               name = cfg.bookmarks.folderName;
@@ -164,7 +162,7 @@ in
               }) cfg.bookmarks.links;
             }
           ];
-        })
+        } else {})
 
         (lib.mkIf cfg.ublock {
           ExtensionInstallForcelist = [

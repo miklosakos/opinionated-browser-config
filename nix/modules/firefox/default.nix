@@ -20,7 +20,7 @@ in
             type = lib.types.str;
             description = "Name of the search engine (e.g., Kagi).";
           };
-          urlTemplate = lib.mkOption {
+          url = lib.mkOption {
             type = lib.types.str;
             description = "URL template with {searchTerms}.";
           };
@@ -116,16 +116,14 @@ config = lib.mkIf cfg.enable {
           };
         }
 
-        # Conditional Homepage
-        (lib.mkIf (cfg.homepage != null) {
+        (if cfg.home != null then {
           Homepage = {
-            URL = cfg.homepage;
+            URL = cfg.home;
             Locked = true;
           };
-        })
+        } else {} )
 
-        # Conditional Search Engine
-        (lib.mkIf (cfg.search != null) {
+        (if cfg.search != null then {
           SearchEngines = {
             Default = cfg.search.name;
             PreventInstalls = false;
@@ -137,17 +135,17 @@ config = lib.mkIf cfg.enable {
               }
             ];
           };
-        })
+        } else{})
 
         # Conditional Managed Bookmarks (Transforms submodule structure into Firefox's expected format)
-        (lib.mkIf (cfg.bookmarks != null) {
+        (if cfg.bookmarks != null then {
           ManagedBookmarks = [
             { toplevel_name = cfg.bookmarks.folder; }
           ] ++ map (link: {
             name = link.name;
             url = link.url;
           }) cfg.bookmarks.links;
-        })
+        } else {} )
 
         # Conditional Extensions
         (lib.mkIf cfg.ublock {

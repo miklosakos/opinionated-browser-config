@@ -6,36 +6,13 @@ I want to provide a helpful resource that targets Linux and macOS primarily to a
 
 ## What does this do?
 
-This disables most of the telemetry, notification permissions, AI and so on and so on in both Firefox and Chrome as much as I could find information about them.
+This disables most of the telemetry, notification permissions, AI and so on and so on  in both Firefox and Chrome as much as I could find information about them plus enables uBlock Origin (Firefox) / uBlock Origin Lite (Chrome).
 
 ## How to use
 
-### `genpol`
-
-`genpol` is a handy utility written to generate configuration files for both Apple macOS and Linux if you prefer not using Ansible nor Nix.
-Usage:
-```
--os / --system: provide the system's name, either linux or mac
--p / --browser: provide which browser you want the policy generated for, either chrome or firefox
--hp / --homepage: optional argument, sets the homepage, required format: http(s)://domain.tld/path/to/site
--b / --bookmarks: provide a bookmarks file, look at the example bookmarks file for an example
--s / --search: optional argument, allows you to set the default search engine, it needs to be used like this: 'Name,https://search.tld/?q='
--u / --ublock: tell the script you want uBlock Origin (Lite)
-```
-The generated files will go to the following path:
-- `com.google.Chrome.plist`: `/Library/Managed Preferences/` or use an MDM solution or a deployment solution like JAMF
-- `firefox_policies.json`:
-  - on Apple macOS: `/Applications/Firefox.app/Contents/Resources/distribution/policies.json`, use an MDM solution or a deployment solution like JAMF
-  - on Linux: `/etc/firefox/policies/policies.json`
-- `chrome_policies.json`: `/etc/opt/chrome/policies/managed/`
-
-Please note that Google Chrome policies can also be used with other Chromium derivatives but your mileage may vary!
-
----
-
 ### Ansible
 
-You can use an inventory file, the Ansible playbook is preconfigured to handle any host matching the following inventory group: `workstation`.
+You can use an inventory file, the Ansible playbook is preconfigured to handle all hosts presents in the inventory file.
 
 Change `ansible/playbook.yml` to match your requirements, i.e. bookmarks, homepage etc.
 
@@ -58,36 +35,36 @@ On NixOS import the repository into your flake, for example:
   };
 
   outputs = { self, nixpkgs, browser-policies }: {
-    nixosConfigurations.hostname = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.hostname = nixpkgs.lib.
+     
+    nixosSystem {
       modules = [
+        nixpkgs.config.allowUnfree = true; #only needed if chrome is being used
         browser-policies.nixosModules.default
         {
-          nixpkgs.config.allowUnfree = true; #only needed if google-chrome is being installed
-
           opinionated.firefox = {
             enable = true;
             homepage = "https://google.com";
             
             search = {
               name = "Kagi";
-              urlTemplate = "https://kagi.com/search?q={searchTerms}";
+              url = "https://kagi.com/search?q={searchTerms}";
             };
 
             bookmarks = {
-              folderName = "Folder";
+              folder = "Folder";
               links = [
                 { name = "Bookmark 1"; url = "https://google.com"; }
                 { name = "Bookmark 2"; url = "https://drive.google.com"; }
                 { name = "Bookmark 3"; url = "https://kagi.com"; }
               ];
             };
-            
             ublock = true;
           };
 
           opinionated.chrome = {
             enable = true;
-            homepage = "https://google.com";
+            home = "https://google.com";
 
             search = {
               name = "Kagi";
@@ -95,14 +72,13 @@ On NixOS import the repository into your flake, for example:
             };
 
             bookmarks = {
-              folderName = "Folder";
+              folder = "Folder";
               links = [
                 { name = "Bookmark 1"; url = "https://google.com"; }
                 { name = "Bookmark 2"; url = "https://drive.google.com"; }
                 { name = "Bookmark 3"; url = "https://kagi.com"; }
               ];
             };
-            
             ublock = true;
           };
         }
