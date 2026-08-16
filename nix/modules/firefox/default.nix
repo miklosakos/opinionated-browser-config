@@ -98,7 +98,6 @@ config = lib.mkIf cfg.enable {
           DisableFirefoxScreenshots = true;
           IPProtectionAvailable = false;
           DisableTelemetry = true;
-          DisableFirefoxStudies = true;
           DisablePocket = true;
           PasswordManagerEnabled = false;
           HardwareAcceleration = true;
