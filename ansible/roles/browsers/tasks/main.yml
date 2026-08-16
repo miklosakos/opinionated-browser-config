@@ -17,7 +17,7 @@
 
 - name: Ensure Google Chrome policy directory exists
   ansible.builtin.file:
-    path: /etc/opt/policies/managed
+    path: /etc/opt/chrome/policies/managed
     state: directory
     owner: root
     group: root
@@ -26,7 +26,7 @@
 - name: Deploy Google Chrome opinionated config
   ansible.builtin.template:
     src: chrome-policies.json.j2
-    dest: /etc/opt/policies/managed/policies.json
+    dest: /etc/opt/chrome/policies/managed/policies.json
     owner: root
     group: root
     mode: '0644'

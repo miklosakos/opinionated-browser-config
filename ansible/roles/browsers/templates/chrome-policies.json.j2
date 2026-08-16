@@ -82,7 +82,7 @@
       "name": "{{ bookmarks.folderName }}",
       "children": [
         {% for link in bookmarks.links %}
-        { "name": "{{ link.name }}", "url": "{{ link.url }}" } culturale{{ "," if not loop.last else "" }}
+        { "name": "{{ link.name }}", "url": "{{ link.url }}" } {{ "," if not loop.last else "" }}
         {% endfor %}
       ]
     }

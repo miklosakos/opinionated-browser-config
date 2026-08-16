@@ -66,6 +66,37 @@ config = lib.mkIf cfg.enable {
       policies = lib.mkMerge [
         # Base policies
         {
+          BlockAboutConfig = true;
+          AIControls = {
+            Default = {
+              Value = "blocked";
+              Locked = true;
+            };
+            Translations = {
+              Value = "blocked";
+              Locked = true;
+            };
+            SidebarChatbot = {
+              Value = "blocked";
+              Locked = true;
+            };
+            SmartWindow = {
+              Value = "blocked";
+              Locked = true;
+            };
+          };
+          DisableFirefoxAccounts = true;
+          DisableFirefoxStudies = true;
+          DisableRemoteImprovements = true;
+          GenerativeAI = {
+            Enabled = false;
+            Chatbot = false;
+            LinkPreviews = false;
+            TabGroups = false;
+            Locked = true;
+          };
+          DisableFirefoxScreenshots = true;
+          IPProtectionAvailable = false;
           DisableTelemetry = true;
           DisableFirefoxStudies = true;
           DisablePocket = true;
@@ -125,6 +156,7 @@ config = lib.mkIf cfg.enable {
             "uBlock0@raymondhill.net" = {
               installation_mode = "force_installed";
               install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
+              private_browsing = true;
             };
           };
           "3rdparty" = {

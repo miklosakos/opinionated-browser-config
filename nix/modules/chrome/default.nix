@@ -147,14 +147,14 @@ in
         })
 
         # Conditional Search Engine
-        (lib.mkIf (cfg.searchEngine != null) {
+        (lib.mkIf (cfg.search != null) {
           DefaultSearchProviderEnabled = true;
           DefaultSearchProviderName = cfg.search.name;
           DefaultSearchProviderSearchURL = cfg.search.url;
         })
 
         # Conditional Managed Bookmarks
-        (lib.mkIf (cfg.managedBookmarks != null) {
+        (lib.mkIf (cfg.bookmarks != null) {
           ManagedBookmarks = [
             {
               name = cfg.bookmarks.folderName;
